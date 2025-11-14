@@ -1,0 +1,7 @@
+# encoding: gbk
+
+title = "³É¼¨·ÖÎöÆ÷"
+version = "v1.0"
+author = ("½¹¶û", "ÁõÓîÑô", "DeepSeek")
+win_width = 480
+win_height = 540
