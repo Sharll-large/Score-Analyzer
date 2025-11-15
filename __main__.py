@@ -4,6 +4,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
 
 import const
 import data_loader
@@ -20,18 +21,21 @@ ttk.Style().configure("TButton", padding=6, relief="flat",
 
 plt.rcParams.update({
     'font.family': 'sans-serif',
-    'font.sans-serif': ['Microsoft YaHei', 'SimHei', 'Arial'],
+    'font.sans-serif': ['Microsoft YaHei', 'simhei', 'arial'],
     'font.size': 12,
     'axes.unicode_minus': False
 })
 
 
+
 if __name__ == "__main__":
     ui.load(root)
-
+    
     root.mainloop()
-    # import plots.single_student
-    # import plots.single_stu_radar_chart
-    # data_loader.try_load()
-    # plots.single_student.show(Student("¡ıΩ‹", 16, 1))
-    # plots.single_stu_radar_chart.show_radar_chart(Student("¡ıΩ‹", 16, 1))
+    
+
+
+    from plots import dot_plot
+    from plots import radar_plot
+    data_loader.try_load()
+    # radar_plot.create_advanced_comparison_radar(Student("’‘–„”¢", 22, 1))

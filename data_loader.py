@@ -4,6 +4,7 @@ import pathlib
 
 import pandas
 from pandas.io.pytables import performance_doc
+from pathlib import Path
 
 from structs import Student, ExamGroup, StudentGroup
 
@@ -20,12 +21,42 @@ infos: dict[dict, dict[str, dict[str, float]]] = {}
 ALL_EXAMS = ExamGroup("所有考试", [])
 ALL_STUDENTS = StudentGroup("全体学生", [])
 
+def count_excel_data(folder_path):
+    """
+    统计文件夹中所有Excel文件的数据总量
+    
+    参数:
+    folder_path: 文件夹路径
+    """
+    # 支持的Excel文件扩展名
+    excel_extensions = ['.xlsx', '.xls', '.xlsm']
+    
+    total_rows = 0
+    file_count = 0
+    
+    # 遍历文件夹中的所有文件
+    for file_path in Path(folder_path).rglob('*'):
+        if file_path.suffix.lower() in excel_extensions:
+            try:
+                # 读取Excel文件
+                df = pandas.read_excel(file_path, sheet_name=0)  # 只读取第一个工作表
+                rows = len(df)
+                total_rows += rows
+                file_count += 1
+                
+            except Exception as e:
+                print(f"错误：读取文件 {file_path.name} 时出错: {e}")
+
+    return total_rows
+    
+
+
 
 def get_single_exam(name):
     return ExamGroup(name, [name])
 
 
-def get_single_student(cls, num, name):
+def get_single_student(name, num, cls):
     s = Student(name, num, cls)
     return StudentGroup(str(s), [s])
 
@@ -45,7 +76,7 @@ def try_load():
     dt_path.mkdir(exist_ok=True)
     tests = []
     students = []
-    for i in dt_path.rglob("*.xlsx"):
+    for i in dt_path.rglob("*.xlsx", "*.xls", "*.xlsm"):
         p = pandas.read_excel(str(i), dtype=tp, usecols=list(tp.keys()))
         tests.append(i.stem)
         for index, row in p.iterrows():
